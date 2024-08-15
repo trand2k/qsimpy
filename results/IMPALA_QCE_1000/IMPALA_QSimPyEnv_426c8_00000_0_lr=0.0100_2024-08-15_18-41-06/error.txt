@@ -1,0 +1,54 @@
+Failure # 1 (occurred at 2024-08-15_18-41-44)
+[36mray::IMPALA.train()[39m (pid=183677, ip=192.168.1.54, actor_id=8b45042519b647e6afcb39f501000000, repr=IMPALA)
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/ray/tune/trainable/trainable.py", line 331, in train
+    raise skipped from exception_cause(skipped)
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/ray/tune/trainable/trainable.py", line 328, in train
+    result = self.step()
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/ray/rllib/algorithms/algorithm.py", line 962, in step
+    train_results, train_iter_ctx = self._run_one_training_iteration()
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/ray/rllib/algorithms/algorithm.py", line 3492, in _run_one_training_iteration
+    training_step_results = self.training_step()
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/ray/rllib/algorithms/impala/impala.py", line 657, in training_step
+    return self._training_step_old_api_stack()
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/ray/rllib/algorithms/impala/impala.py", line 1034, in _training_step_old_api_stack
+    self._get_samples_from_workers_old_and_hybrid_api_stack(
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/ray/rllib/algorithms/impala/impala.py", line 1117, in _get_samples_from_workers_old_and_hybrid_api_stack
+    ] = self.env_runner_group.fetch_ready_async_reqs(
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/ray/rllib/env/env_runner_group.py", line 1055, in fetch_ready_async_reqs
+    _handle_remote_call_result_errors(
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/ray/rllib/env/env_runner_group.py", line 1264, in _handle_remote_call_result_errors
+    raise r.get()
+ray.exceptions.RayTaskError(ValueError): [36mray::RolloutWorker.apply()[39m (pid=183790, ip=192.168.1.54, actor_id=70f3daa06fed19ee14eecce001000000, repr=<ray.rllib.evaluation.rollout_worker.RolloutWorker object at 0x7c6206286500>)
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/ray/rllib/utils/actor_manager.py", line 192, in apply
+    raise e
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/ray/rllib/utils/actor_manager.py", line 181, in apply
+    return func(self, *args, **kwargs)
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/ray/rllib/algorithms/impala/impala.py", line 1113, in <lambda>
+    lambda worker: worker.sample()
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/ray/rllib/evaluation/rollout_worker.py", line 676, in sample
+    batches = [self.input_reader.next()]
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/ray/rllib/evaluation/sampler.py", line 91, in next
+    batches = [self.get_data()]
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/ray/rllib/evaluation/sampler.py", line 273, in get_data
+    item = next(self._env_runner)
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/ray/rllib/evaluation/env_runner_v2.py", line 348, in run
+    outputs = self.step()
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/ray/rllib/evaluation/env_runner_v2.py", line 404, in step
+    self._base_env.send_actions(actions_to_send)
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/ray/rllib/env/vector_env.py", line 462, in send_actions
+    ) = self.vector_env.vector_step(action_vector)
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/ray/rllib/env/vector_env.py", line 358, in vector_step
+    raise e
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/ray/rllib/env/vector_env.py", line 351, in vector_step
+    results = self.envs[i].step(actions[i])
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/gymnasium/core.py", line 469, in step
+    observation, reward, terminated, truncated, info = self.env.step(action)
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/gymnasium/core.py", line 469, in step
+    observation, reward, terminated, truncated, info = self.env.step(action)
+  File "/home/trand/Desktop/qsimpy/gymenv_qsimpy.py", line 256, in step
+    time_reward, _ = self.submit_task_to_qnode(
+  File "/home/trand/Desktop/qsimpy/gymenv_qsimpy.py", line 237, in submit_task_to_qnode
+    self.qsp_env.process(event)
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/simpy/events.py", line 341, in __init__
+    raise ValueError(f'{generator} is not a generator.')
+ValueError: <Timeout(63.17603829502051) object at 0x7c61f6a42560> is not a generator.

@@ -1,0 +1,43 @@
+Failure # 1 (occurred at 2024-08-15_16-09-57)
+The actor died because of an error raised in its creation task, [36mray::IMPALA.__init__()[39m (pid=168466, ip=192.168.1.54, actor_id=fefa00576a198582e859ba7a01000000, repr=IMPALA)
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/ray/rllib/env/env_runner_group.py", line 243, in _setup
+    self.add_workers(
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/ray/rllib/env/env_runner_group.py", line 820, in add_workers
+    raise result.get()
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/ray/rllib/utils/actor_manager.py", line 500, in _fetch_result
+    result = ray.get(ready)
+ray.exceptions.ActorDiedError: The actor died because of an error raised in its creation task, [36mray::RolloutWorker.__init__()[39m (pid=168566, ip=192.168.1.54, actor_id=79aa8dccb9efc80f7c83d5e301000000, repr=<ray.rllib.evaluation.rollout_worker.RolloutWorker object at 0x7d74440e6a70>)
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/ray/rllib/evaluation/rollout_worker.py", line 521, in __init__
+    self._update_policy_map(policy_dict=self.policy_dict)
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/ray/rllib/evaluation/rollout_worker.py", line 1726, in _update_policy_map
+    self._build_policy_map(
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/ray/rllib/evaluation/rollout_worker.py", line 1837, in _build_policy_map
+    new_policy = create_policy_for_framework(
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/ray/rllib/utils/policy.py", line 140, in create_policy_for_framework
+    return policy_class(observation_space, action_space, merged_config)
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/ray/rllib/algorithms/impala/impala_torch_policy.py", line 273, in __init__
+    self._initialize_loss_from_dummy_batch()
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/ray/rllib/policy/policy.py", line 1482, in _initialize_loss_from_dummy_batch
+    self.loss(self.model, self.dist_class, train_batch)
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/ray/rllib/algorithms/impala/impala_torch_policy.py", line 316, in loss
+    values_time_major = _make_time_major(values)
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/ray/rllib/algorithms/impala/impala_torch_policy.py", line 296, in _make_time_major
+    return make_time_major(
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/ray/rllib/algorithms/impala/impala_torch_policy.py", line 161, in make_time_major
+    rs = torch.reshape(tensor, [B, T] + list(tensor.shape[1:]))
+RuntimeError: shape '[1, 50]' is invalid for input of size 78
+
+During handling of the above exception, another exception occurred:
+
+[36mray::IMPALA.__init__()[39m (pid=168466, ip=192.168.1.54, actor_id=fefa00576a198582e859ba7a01000000, repr=IMPALA)
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/ray/rllib/algorithms/algorithm.py", line 573, in __init__
+    super().__init__(
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/ray/tune/trainable/trainable.py", line 158, in __init__
+    self.setup(copy.deepcopy(self.config))
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/ray/rllib/algorithms/impala/impala.py", line 583, in setup
+    super().setup(config)
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/ray/rllib/algorithms/algorithm.py", line 659, in setup
+    self.env_runner_group = EnvRunnerGroup(
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/ray/rllib/env/env_runner_group.py", line 195, in __init__
+    raise e.args[0].args[2]
+RuntimeError: shape '[1, 50]' is invalid for input of size 78

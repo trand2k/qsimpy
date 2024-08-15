@@ -1,0 +1,26 @@
+Failure # 1 (occurred at 2024-08-13_12-02-39)
+[36mray::DQN.train()[39m (pid=17494, ip=192.168.1.54, actor_id=896922bdce43b119a7b678ec01000000, repr=DQN)
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/ray/tune/trainable/trainable.py", line 331, in train
+    raise skipped from exception_cause(skipped)
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/ray/tune/trainable/trainable.py", line 328, in train
+    result = self.step()
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/ray/rllib/algorithms/algorithm.py", line 962, in step
+    train_results, train_iter_ctx = self._run_one_training_iteration()
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/ray/rllib/algorithms/algorithm.py", line 3492, in _run_one_training_iteration
+    training_step_results = self.training_step()
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/ray/rllib/algorithms/dqn/dqn.py", line 607, in training_step
+    return self._training_step_old_and_hybrid_api_stack()
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/ray/rllib/algorithms/dqn/dqn.py", line 772, in _training_step_old_and_hybrid_api_stack
+    new_sample_batch: SampleBatchType = synchronous_parallel_sample(
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/ray/rllib/execution/rollout_ops.py", line 100, in synchronous_parallel_sample
+    sampled_data = worker_set.foreach_worker(
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/ray/rllib/env/env_runner_group.py", line 926, in foreach_worker
+    _handle_remote_call_result_errors(
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/ray/rllib/env/env_runner_group.py", line 1264, in _handle_remote_call_result_errors
+    raise r.get()
+ray.exceptions.RayTaskError(TypeError): [36mray::RolloutWorker.apply()[39m (pid=17614, ip=192.168.1.54, actor_id=53074b1be708574cb0aa8ea501000000, repr=<ray.rllib.evaluation.rollout_worker.RolloutWorker object at 0x7b5d3793aa70>)
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/ray/cloudpickle/cloudpickle.py", line 1479, in dumps
+    cp.dump(obj)
+  File "/home/trand/miniconda3/envs/qsimpy/lib/python3.10/site-packages/ray/cloudpickle/cloudpickle.py", line 1245, in dump
+    return super().dump(obj)
+TypeError: cannot pickle 'generator' object

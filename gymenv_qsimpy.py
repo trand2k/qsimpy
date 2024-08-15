@@ -177,7 +177,7 @@ class QSimPyEnv(gym.Env):
 
         # Get QTask from the subset of the dataset
         qtasks = self.qtask_dataset.get_subset_data(self.round)
-
+        # import pdb;pdb.set_trace()
         n_qtasks = len(qtasks)  # number of qtasks
         qtask_arrival = self.rng.uniform(
             low=0.1 + self.round * 60, high=59.9 + self.round * 60, size=n_qtasks
@@ -225,10 +225,17 @@ class QSimPyEnv(gym.Env):
             self.qtasks.insert(index, qtask)
             return -0.1, qtask.rescheduling_count
         # Submit the qtask to the qnode following the action
+        #TODO: update
         qtask_execution = self.broker.submit_qtask_to_qnode(
             qtask, self.qnodes[qnode_id]
         )
         self.qsp_env.process(qtask_execution)
+
+        # Example refactor
+        # qtask_execution = list(self.broker.submit_qtask_to_qnode(qtask, self.qnodes[qnode_id]))
+        # for event in qtask_execution:
+        #     self.qsp_env.process(event)
+
         # print(f"Estimated waiting time: {waiting_time}")
         # print(f"Estimated execution time: {execution_time}")
         reward = waiting_time + execution_time
@@ -263,8 +270,8 @@ class QSimPyEnv(gym.Env):
             terminated = True
 
         self.current_obs = self._get_obs()
-
-        return self.current_obs, reward, terminated, False, {"scheduled_qtask": scheduled_qtask}
+        info = {"scheduled_qtask": scheduled_qtask}
+        return self.current_obs, reward, terminated, False, info
 
     def close(self):
         pass

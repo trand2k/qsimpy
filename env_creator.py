@@ -5,6 +5,7 @@ import numpy as np
 
 
 def qsimpy_env_creator(env_config):
+    # import pdb;pdb.set_trace()
     dataset = env_config.pop("dataset", None)
     if dataset is None:
         raise ValueError("Dataset is not specified")
@@ -24,4 +25,6 @@ def qsimpy_env_creator(env_config):
     if reward_filter is not None:
         if reward_filter == "scale_2x":
             env = ScaleQSimPyEnv(env, scale=env_config.pop("reward_scale", 2))
+
+    # import pdb;pdb.set_trace()
     return env

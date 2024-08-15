@@ -4,9 +4,8 @@ import ray
 from ray import tune, air, train
 from ray.tune.registry import register_env
 from env_creator import qsimpy_env_creator
-from ray.rllib.algorithms.dqn import DQNConfig
+from ray.rllib.algorithms.impala import IMPALAConfig  # Changed to IMPALA
 from ray.rllib.utils.framework import try_import_tf
-from ray.tune.analysis import ExperimentAnalysis
 import os
 
 tf1, tf, tfv = try_import_tf()
@@ -31,21 +30,13 @@ parser.add_argument(
 if __name__ == "__main__":
     args = parser.parse_args()
 
-    # ray.init(num_cpus=args.num_cpus or None)
     ray.init()
     register_env("QSimPyEnv", qsimpy_env_creator)
 
-    replay_config = {
-        "type": "MultiAgentPrioritizedReplayBuffer",
-        "capacity": 60000,
-        "prioritized_replay_alpha": 0.5,
-        "prioritized_replay_beta": 0.5,
-        "prioritized_replay_eps": 3e-6,
-    }
-
     config = (
-        DQNConfig()
+        IMPALAConfig()
         .framework(framework=args.framework)
+        .resources(num_gpus=0)
         .environment(
             env="QSimPyEnv",
             env_config={
@@ -56,20 +47,12 @@ if __name__ == "__main__":
         )
         .training(
             lr=tune.grid_search([0.01]),
-            train_batch_size=tune.grid_search([78]),
-            replay_buffer_config=replay_config,
-            num_atoms=tune.grid_search(
-                [
-                    10
-                ]
-            ),
-            n_step=tune.grid_search([5]),
-            noisy=True,
-            v_min=-10.0,
-            v_max=10.0,
+            train_batch_size=50,  # Adjusted to match expected tensor size
+            vtrace=True,
         )
-        .rollouts(num_rollout_workers=2)
+        .rollouts(num_rollout_workers=2, num_envs_per_worker=2)
     )
+
 
     stop_config = {
         "timesteps_total": args.stop_timesteps,
@@ -84,17 +67,16 @@ if __name__ == "__main__":
 
     # Create the storage_path with the "file://" scheme
     storage_path = f"file://{result_directory}"
-    # import pdb;pdb.set_trace()
+
     dict_ = config.to_dict()
-    dict_["num_env_runners"] = 4
+    dict_["num_env_runners"] = 2
     results = tune.Tuner(
-        "DQN",
+        "IMPALA",  # Changed to IMPALA
         run_config=air.RunConfig(
             stop=stop_config,
-            # Save checkpoints every 10 iterations.
             checkpoint_config=train.CheckpointConfig(checkpoint_frequency=10),
             storage_path=storage_path, 
-            name="DQN_QCE_1000"
+            name="IMPALA_QCE_1000"  # Changed the name accordingly
         ),
         param_space=dict_,
     ).fit()
